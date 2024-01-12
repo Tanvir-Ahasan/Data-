@@ -7,4 +7,11 @@ ozone_data <- read.csv("data_ozone.csv",header = TRUE)
 ozone75_data <- ozone_data[ozone_data$Temp>75,]
 write.csv(ozone75_data,file = "data_ozone_75.csv"
 plot(ozone_data$Ozone)
-
+hist(ozone_data$Ozone)
+plot(density(ozone_data$Ozone))
+mean(ozone_data$Ozone)
+var(ozone_data$Ozone)
+library(moments)
+skewness(ozone_data$Ozone)
+kurtosis(ozone_data$Ozone)
+quantile(ozone_data$Ozone, probs = c(0.1,0.3,0.6,0.9))
