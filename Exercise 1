@@ -1,0 +1,10 @@
+getwd()
+setwd("C:\\Users\\tajes\\Downloads")
+ozone_data <- read.table("data_ozone.txt", header = TRUE)
+ozone_wind_data <- ozone_data[,c(1,2)]
+write.table(ozone_wind_data,file = "data_ozone_wind.txt")
+ozone_data <- read.csv("data_ozone.csv",header = TRUE)
+ozone75_data <- ozone_data[ozone_data$Temp>75,]
+write.csv(ozone75_data,file = "data_ozone_75.csv"
+plot(ozone_data$Ozone)
+
