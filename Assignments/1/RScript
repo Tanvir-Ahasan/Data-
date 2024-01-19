@@ -76,11 +76,11 @@ abline(h = min(temperature_2021), lty = 1, col = "green")
 legend("topright", legend = c("mean", "max", "min"), fill = c("red", "blue","green"))
 
 
-temperature_2021 <- data$temp[data$year == "2021"]
-plot(temperature_2021, main = "Temperature Brussels 2021", type = "l", xlab = "Time in days", ylab = "Temperature in degrees Celsius")
-abline(h = mean(temperature_2021), lty = 1, col = "red")
-abline(h = max(temperature_2021), lty = 1, col = "blue")
-abline(h = min(temperature_2021), lty = 1, col = "green")
+temperature_2022 <- data$temp[data$year == "2022"]
+plot(temperature_2022, main = "Temperature Brussels 2022", type = "l", xlab = "Time in days", ylab = "Temperature in degrees Celsius")
+abline(h = mean(temperature_2022), lty = 1, col = "red")
+abline(h = max(temperature_2022), lty = 1, col = "blue")
+abline(h = min(temperature_2022), lty = 1, col = "green")
 legend("topright", legend = c("mean", "max", "min"), fill = c("red", "blue","green"))
 
 coldest=min(data$temp)
