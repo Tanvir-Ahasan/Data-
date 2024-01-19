@@ -8,11 +8,11 @@ hist(data$temp, main = "Histogram of Temperature", xlab = "Temperature (Celsius)
 
 par(mfrow=c(1,1))
 quantile(data$consum,probs=0.9)
-max(data$consum)
+min(data$consum)
 quantile(data$solprod, probs=0.9)
-max(data$solprod)
+min(data$solprod)
 quantile(data$temp, probs=0.9)
-max(data$temp)
+min(data$temp)
 
 data_setting=data$setting
 total_days=length(data_setting)
