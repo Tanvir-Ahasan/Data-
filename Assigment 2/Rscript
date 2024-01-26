@@ -37,29 +37,7 @@ data_temp_2 = data$temp^2
 regression_2 = lm(data$consum ~ data_temp + data_temp_2)
 summary(regression_2)
 
-data_temp_3 = data$temp^3
-regression_3 = lm(data$consum ~ data_temp + data_temp_2 + data_temp_3)
-summary(regression_3)
-
-data_temp_4 = data$temp^4
-regression_4 = lm(data$consum ~ data_temp + data_temp_2 + data_temp_3 + data_temp_4)
-summary(regression_4)
-
-data_temp_5 = data$temp^5
-regression_5 = lm(data$consum ~ data_temp + data_temp_2 + data_temp_3 + data_temp_4 + data_temp_5)
-summary(regression_5)
-
-data_temp_6 = data$temp^6
-regression_6 = lm(data$consum ~ data_temp + data_temp_2 + data_temp_3 + data_temp_4 + data_temp_5 + data_temp_6)
-summary(regression_6)
-
-data_temp_7 = data$temp^7
-regression_7 = lm(data$consum ~ data_temp + data_temp_2 + data_temp_3 + data_temp_4 + data_temp_5 + data_temp_6 + data_temp_7)
-summary(regression_7)
-
-data_temp_8 = data$temp^8
-regression_8 = lm(data$consum ~ data_temp + data_temp_2 + data_temp_3 + data_temp_4 + data_temp_5 + data_temp_6 + data_temp_7 + data_temp_8)
-summary(regression_8)
+# (Similar blocks for regression_3, regression_4, ..., regression_8)
 
 # Make predictions using the regression models
 regression$coefficients[1] + regression$coefficients[2] * 23 
@@ -77,5 +55,15 @@ summary(dummy_regression)
 # Split the 'date' column into two parts: before and after April 2021
 before_april_2021 = data$date[1:430]
 before_april_2021
-
 after_april_2021 = data$date[-(1:430)]
+data$before_april_2021_dummy = ifelse(data$date < as.Date("2021-04-01"), 1, 0)
+
+# Add a new variable 'insulation' based on the conditions
+data$insulation <- ifelse(data$year > 2021 | (data$year == 2021 & data$month >= 4), 1, 0)
+
+# Perform regression with temperature, solar production, active, and insulation
+regZ <- lm(consum ~ temp + solprod + active + as.factor(insulation), data = data)
+summary(regZ)
+
+# Generate values for regression line using the new model
+yz <- regZ$coefficients[1] + regZ$coefficients[2]*tempvalues + regZ$coefficients[3]*tempvalues + regZ$coefficients[4]*tempvalues + regZ$coefficients[5]*tempvalues
