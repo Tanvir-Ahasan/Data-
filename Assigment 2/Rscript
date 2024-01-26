@@ -1,0 +1,61 @@
+data = read.csv("energy_data_2020_2022.csv", header = TRUE)
+plot(data$temp, data$consum, main = "Relationship temperature and consumption", xlab = "Temperature in Degrees Celsius", ylab = "Energy Consumption in KwH")
+abline(h = mean(data$consum), lty = 1, col = "red")
+abline(h = median(data$consum), lty = 1, col = "blue")
+legend("topright", legend = c("mean","median", "regression", "regression_5") ,fill = c("red", "blue", "green","brown"))
+
+data_temp = data$temp
+regression = lm(data$consum ~ data_temp)
+summary(regression)
+tempvalues = seq(from = -6, to = 30, length.out = 1000)
+consumvalues = regression$coefficients[1] + regression$coefficients[2] * tempvalues
+consumvalues5 = regression_5$coefficients[1] + regression_5$coefficients[2] * tempvalues +
+  regression_5$coefficients[3] * tempvalues^2 + regression_5$coefficients[4] * tempvalues^3 + 
+  regression_5$coefficients[5] * tempvalues^4 + regression_5$coefficients[6] * tempvalues^5
+consumvalues5 = regression_5$coefficients[1] + regression_5$coefficients[2] * tempvalues +
+  regression_5$coefficients[3] * tempvalues^2 + regression_5$coefficients[4] * tempvalues^3 + 
+  regression_5$coefficients[5] * tempvalues^4 + regression_5$coefficients[6] * tempvalues^5
+points(tempvalues, consumvalues, type = "l", col = "green")
+points(tempvalues, consumvalues5, type = "l", col = "brown")
+plot(data$temp, resid(regression), main = "Residuals", xlab = "Temperature in Degrees celsius", ylab = "Residuals")
+
+data_temp_2 = data$temp^2
+regression_2 = lm(data$consum ~ data_temp + data_temp_2)
+summary(regression_2)
+data_temp_3 = data$temp^3
+regression_3 = lm(data$consum ~ data_temp + data_temp_2 + data_temp_3)
+summary(regression_3)
+data_temp_4 = data$temp^4
+regression_4 = lm(data$consum ~ data_temp + data_temp_2 + data_temp_3 + data_temp_4)
+summary(regression_4)
+data_temp_5 = data$temp^5
+regression_5 = lm(data$consum ~ data_temp + data_temp_2 + data_temp_3 + data_temp_4 + data_temp_5)
+summary(regression_5)
+data_temp_6 = data$temp^6
+regression_6 = lm(data$consum ~ data_temp + data_temp_2 + data_temp_3 + data_temp_4 + data_temp_5 + data_temp_6)
+summary(regression_6)
+data_temp_7 = data$temp^7
+regression_7 = lm(data$consum ~ data_temp + data_temp_2 + data_temp_3 + data_temp_4 + data_temp_5 + data_temp_6 + data_temp_7)
+summary(regression_7)
+data_temp_8 = data$temp^8
+regression_8 = lm(data$consum ~ data_temp + data_temp_2 + data_temp_3 + data_temp_4 + data_temp_5 + data_temp_6 + data_temp_7 + data_temp_8)
+summary(regression_8)
+
+
+regression$coefficients[1] + regression$coefficients[2] * 23 
+regression_5$coefficients[1] + regression_5$coefficients[2] * 23 + regression_5$coefficients[3] * 23^2 + regression_5$coefficients[4] * 23^3 + regression_5$coefficients[5] * 23^4 + regression_5$coefficients[6] * 23^5
+
+data_solprod = data$solprod
+data_active = data$active
+multiple_regression = lm(data$consum ~ data_temp + data_active + data_solprod)
+summary(multiple_regression)
+
+dummy_regression = lm(data$consum ~ as.factor(data_temp) + data_active + data_solprod)
+summary(dummy_regression)
+
+
+
+before_april_2021 = data$date[1:430]
+before_april_2021
+after_april_2021 = data$date[-(1:430)]
+
