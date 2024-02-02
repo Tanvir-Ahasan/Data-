@@ -1,0 +1,71 @@
+getwd()
+setwd("C:\\Users\\tajes\\Downloads")
+data <- read.csv("genre_data.csv", header = TRUE)
+
+# Define a function 'ML_rule' for creating a simple rule-based classifier
+ML_rule <- function(x, y){
+  # Calculate the threshold based on the means of two input vectors
+  tr <- (mean(x) + mean(y))/2
+  
+  # Check if mean of the first vector is greater than the mean of the second vector
+  if(mean(x) > mean(y)){
+    r1 <- c(tr, Inf)
+    r2 <- c(-Inf, tr)
+    pxy <- mean(y > tr)
+    pyx <- mean(x < tr)
+    confusion_matrix <- matrix(c(sum(x > tr), sum(x < tr), sum(y > tr), sum(y < tr)), nrow = 2, ncol = 2)
+    mis_prob <- c(pxy, pyx)
+    n_mis <- sum(x < tr) + sum(y > tr)
+    n_obs <- length(x) + length(y)
+    APER <- (n_mis)/ n_obs
+    return(list("R1"= r1, "R2"= r2, "confusion matrix" = confusion_matrix, "misclassification probabilities (p1|2, p2|1)" = mis_prob, "APER" = APER))
+  } else {
+    r1 <- c(-Inf, tr)
+    r2 <- c(tr, Inf)
+    pxy <- mean(y < tr)
+    pyx <- mean(x > tr)
+    confusion_matrix <- matrix(c(sum(x < tr), sum(x > tr), sum(y < tr), sum(y > tr)), nrow = 2, ncol = 2)
+    mis_prob <- c(pxy, pyx)
+    n_mis <- sum(x > tr) + sum(y < tr)
+    n_obs <- length(x) + length(y)
+    APER <- (n_mis)/ n_obs
+    return(list("R1"= r1, "R2"= r2, "confusion matrix" = confusion_matrix, "misclassification probabilities (p1|2, p2|1)" = mis_prob, "APER" = APER))
+  }
+}
+
+# Read the CSV data again for redundancy
+data = read.csv("genre_data.csv", header = TRUE)
+
+# Extract danceability data for rock and pop genres
+dance_rock = data$danceability[data$genre == "rock"]
+dance_pop = data$danceability[data$genre == "pop"]
+
+# Plot density distributions of danceability for rock and pop genres
+plot(density(dance_rock), type = "l", col = "red", main = "Rock and Pop dance distributions", xlim = c(0, 110))
+points(density(dance_pop), type = "l", col = "blue")
+abline(v = mean(dance_rock), col = "red", lty = 1)
+abline(v = mean(dance_pop), col = "blue", lty = 1)
+legend("topright", legend = c("Rock", "Mean Rock", "Pop", "Mean Pop"), fill = c("red", "red" ,"blue", "blue"))
+
+# Apply the ML_rule function to danceability data for rock and pop genres
+ML_rule(dance_rock, dance_pop)
+
+# Similar operations for other features (valence, energy) and genres
+
+# Run ML_rule function on randomly generated data for demonstration purposes
+for (i in 1:1000) {
+  popul1 = rnorm(150, 1, sqrt(3))
+  popul2 = rnorm(150, 2, sqrt(3))
+  set.seed(i + 1)
+  ML_rule(popul1, popul2)
+}
+
+# Plot the distribution of misclassification probabilities
+density_1_2 <- density(mis_prob_1_2)
+density_2_1 <- density(mis_prob_2_1)
+
+plot(density_1_2, col = "blue", main = "Distribution of Misclassification Probabilities", xlab = "Misclassification Probability", ylab = "Density")
+lines(density_2_1, col = "red")
+abline(v = true_prob, col = "green", lty = 2)
+legend("topright", legend = c("p1|2", "p2|1", "True Probability"), col = c("blue", "red", "green"), lty = 1, lwd = 2, cex=0.5)
+
